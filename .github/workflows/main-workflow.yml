@@ -1,0 +1,69 @@
+# This file contains the main workflow for the create-react-ssr project. It defines the steps and actions to be taken when the workflow is triggered.
+# Name of the workflow
+name: Main Workflow
+
+# Define the events that trigger the workflow
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: ['*']
+
+# Define the jobs that run as part of the workflow
+jobs:
+  # Job to run unit tests
+  unit-testing:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    steps:
+    - uses: actions/checkout@v4
+    - name: Use Node.js 16
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16
+        registry-url: https://registry.npmjs.org/
+    - run: npm ci
+    - run: npm test
+
+  # Job to build the package
+  test-build-package:
+    if: github.ref != 'refs/heads/master'
+    needs: [ unit-testing]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          registry-url: https://registry.npmjs.org/
+      - run: npm ci
+      - run: npm run build
+
+  # Job and deploy app to Docker Hub
+  build-and-deploy:
+    if: github.ref == 'refs/heads/master'
+    needs: [ unit-testing ]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          registry-url: https://registry.npmjs.org/
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+          tags: aleleba/run-app-from-cdn:latest
