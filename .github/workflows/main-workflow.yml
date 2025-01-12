@@ -27,6 +27,8 @@ jobs:
         registry-url: https://registry.npmjs.org/
     - run: npm ci
     - run: npm test
+      env:
+        CDN_URL: htts://google.com
 
   # Job to build the package
   test-build-package:
