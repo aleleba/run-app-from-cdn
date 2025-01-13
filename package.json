@@ -1,6 +1,6 @@
 {
   "name": "run-app-from-cdn",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Una aplicación sencilla en Express que sirve una aplicación a través de un enlace CDN.",
   "main": "src/app.ts",
   "scripts": {
@@ -12,10 +12,12 @@
   },
   "dependencies": {
     "dotenv": "^16.4.7",
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "http-proxy-middleware": "^3.0.3"
   },
   "devDependencies": {
     "@types/express": "^5.0.0",
+    "@types/http-proxy-middleware": "^1.0.0",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.10.5",
     "@types/supertest": "^6.0.2",

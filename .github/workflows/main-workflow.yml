@@ -28,7 +28,7 @@ jobs:
     - run: npm ci
     - run: npm test
       env:
-        CDN_URL: htts://google.com
+        CDN_URL: https://p-lao.com
 
   # Job to build the package
   test-build-package:
