@@ -20,7 +20,7 @@ Esta es una aplicación sencilla construida con Express que sirve cualquier apli
 2. Navega al directorio del proyecto:
 
    ```
-   cd simple-express-app
+   cd run-app-from-cdn
    ```
 
 3. Instala las dependencias:
@@ -48,8 +48,6 @@ La aplicación estará disponible en `http://localhost:3000`.
 ## Estructura del Proyecto
 
 - `src/app.ts`: Punto de entrada de la aplicación.
-- `src/controllers/index.ts`: Controlador que maneja la lógica para servir la aplicación.
-- `src/routes/index.ts`: Configuración de las rutas de la aplicación.
 - `src/types/index.ts`: Definiciones de tipos personalizados.
 - `.env`: Variables de entorno.
 - `tsconfig.json`: Configuración de TypeScript.
