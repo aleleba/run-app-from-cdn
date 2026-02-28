@@ -9,6 +9,9 @@ on:
   pull_request:
     branches: ['*']
 
+env:
+  REGISTRY: gitea.p-lao.com
+
 # Define the jobs that run as part of the workflow
 jobs:
   # Job to run unit tests
@@ -44,7 +47,7 @@ jobs:
       - run: npm ci
       - run: npm run build
 
-  # Job and deploy app to Docker Hub
+  # Job and deploy app to Gitea Registry
   build-and-deploy:
     if: github.ref == 'refs/heads/master'
     needs: [ unit-testing ]
@@ -59,13 +62,14 @@ jobs:
         uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-      - name: Login to Docker Hub
+      - name: Login to Gitea Registry
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_TOKEN }}
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: aleleba/run-app-from-cdn:latest
+          tags: gitea.p-lao.com/aleleba/run-app-from-cdn:latest
